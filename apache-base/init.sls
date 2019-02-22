@@ -15,7 +15,7 @@ index_conf_in_place:
 # index_conf_in_place:
 #   file.managed:
 #     - name: /etc/httpd/conf/httpd.conf
-#     - source: salt://apache/files/httpd.conf
+#     - source: salt://apache-base/files/httpd.conf
 #     - template: jinja
 #     - port: 80
 #     - user: apache
@@ -33,7 +33,7 @@ httpd_running:
 file_version_txt_managed:
   file.managed:
       - name: /var/www/html/version.txt
-      - source: salt://apache/files/version.txt
+      - source: salt://apache-base/files/version.txt
       - template: jinja
       - version: {{ version }}
 
