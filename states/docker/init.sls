@@ -53,7 +53,7 @@ webhook_git_cloned:
 image_built:
   docker_image.present:
     - build: /var/python-github-webhooks
-    - name: {{ docker_image }} 
+    - tag: {{ docker_image }} 
     - watch: 
       - webhook_git_cloned
 
