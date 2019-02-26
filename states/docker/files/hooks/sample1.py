@@ -3,6 +3,7 @@
 # File: push-myrepo-master
 
 import sys
+import os
 import json
 
 if __name__ == "__main__":
@@ -11,7 +12,10 @@ if __name__ == "__main__":
 
     # Do something with the payload
     name = payload['repository']['name']
-    outfile = '/tmp/hook-{}.log'.format(name)
+    outfile = '/app/tmp/hook-{}.log'.format(name)
+
+    if not os.path.exists('/app/tmp/'):
+        os.mkdir('/app/tmp/')
 
     with open(outfile, 'w') as f:
         f.write(json.dumps(payload))
