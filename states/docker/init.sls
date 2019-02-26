@@ -27,7 +27,7 @@ docker-installed:
 
 pip_installed:
   pkg.installed:
-    - name: python-pip
+    - name: python2-pip
 
 docker_py_installed:
   pip.installed:
