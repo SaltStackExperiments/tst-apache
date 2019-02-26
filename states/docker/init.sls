@@ -14,6 +14,8 @@ docker-installed:
         - docker-ce
         - docker-ce-cli
         - containerd.io
+      - require:
+        - docker_repo_added
 
 pip_installed:
   pkg.installed:
@@ -25,3 +27,9 @@ docker_py_installed:
     - require:
       - pip_installed
 
+docker_running:
+  service.running:
+    - name: docker
+    - enable: True
+    - require:
+      - docker-installed
