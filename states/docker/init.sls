@@ -1,13 +1,17 @@
-subscript-rhel-y-server-extras-rpms:
-  cmd.run:
-    - name: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
+# subscript-rhel-y-server-extras-rpms:
+#   cmd.run:
+#     - name: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
 
-docker_repo_added:
-  pkgrepo.managed:
-    - name: docker-ce
-    - enabled: True
-    - baseurl: https://download.docker.com/linux/centos/docker-ce.repo
-    - refresh: True
+setup_repo:
+  cmd.run:
+    - name: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+
+# docker_repo_added:
+#   pkgrepo.managed:
+#     - name: docker-ce
+#     - enabled: True
+#     - baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+#     - refresh: True
 
 docker-installed:
   pkg.installed: 
