@@ -85,8 +85,8 @@ webhooks_running:
       - "5000"
     - publish:
       - "5000:5000"
-    - volumes:
-      - '{{ webhooks_base_folder }}hooks:/var/webhooks/hooks'
+    - binds:
+      - '{{ webhooks_base_folder }}hooks:/var/webhooks/hooks:Z'
       - '{{ webhooks_base_folder }}config.json:/app/config.json'
     - require:
       - file_/var/webhooks/config.js_managed
@@ -111,9 +111,5 @@ apache_running:
 http_check_port_query:
   http.query:
     - name: "http://localhost:5000/webhook"
-    # status code to look for. Can be used in place of match
     - status: 200
-    # - match: pattern to look for in the return text
-    # default match_type is string
-    # - match_type: string|pcre
     - method: POST
