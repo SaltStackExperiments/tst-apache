@@ -84,7 +84,7 @@ webhooks_running:
     - ports:
       - "5000"
     - publish:
-      - "5000"
+      - "5000:5000"
     - volumes:
       - '{{ webhooks_base_folder }}hooks:/var/webhooks/hooks'
       - '{{ webhooks_base_folder }}config.json:/src/config.json'
