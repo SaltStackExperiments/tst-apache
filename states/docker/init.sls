@@ -17,6 +17,7 @@ docker-installed:
   pkg.installed: 
     - names:
       - yum-utils
+      - httpd
       - device-mapper-persistent-data
       - lvm2
       - docker-ce
