@@ -65,8 +65,8 @@ image_built:
 # check existence of and contents of /var/webhooks/config.js
 file_/var/webhooks/config.js_managed:
   file.managed:
-      - name: {{webhooks_base_folder}}config.js
-      - source: salt://docker/files/config.js
+      - name: {{webhooks_base_folder}}config.json
+      - source: salt://docker/files/config.json
       - makedirs: True
 
 # check existence of and contents of /var/webhooks/hooks/
