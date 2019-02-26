@@ -7,21 +7,13 @@ httpd:
    pkg.installed: 
      - name: httpd
 
-index_conf_in_place:
-  test.configurable_test_state:
-    - name: index_conf_in_place
-    - changes: True
-    - result: True
-    - comment: stand-in for default
-
-# index_conf_in_place:
-#   file.managed:
-#     - name: /etc/httpd/conf/httpd.conf
-#     - source: salt://apache-base/files/httpd.conf
-#     - template: jinja
-#     - port: 80
-#     - user: apache
-#     - group: apache
+# check existence of and contents of /etc/httpd/conf/httpd.conf
+file_/etc/httpd/conf/httpd.conf_managed:
+  file.managed:
+      - name: /etc/httpd/conf/httpd.conf
+      - source: salt://apache-base/files/httpd.conf 
+      - require:
+        - httpd
 
 httpd_running:
   service.running:
@@ -29,7 +21,7 @@ httpd_running:
     - restart: true
     - enabled: true
     - watch:
-      - index_conf_in_place
+      - file_/etc/httpd/conf/httpd.conf_managed
 
 # check existence of and contents of status_txt
 file_application_in_place:
@@ -47,5 +39,3 @@ verify_application_status:
     - require:
       - httpd_running
       - file_application_in_place
-
-
