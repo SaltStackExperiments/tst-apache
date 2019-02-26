@@ -210,3 +210,11 @@ if __name__ == "__main__":
         f.write(json.dumps(payload))
 
     sset = SSEThing('https://sse.kajigga.com', 'root', 'bonkersnot')
+    log.debug(sset.api.cmd.route_cmd(cmd='local',
+                                     fun='test.ping',
+                                     tgt={
+                                         'saltmaster': {
+                                             'tgt': '*',
+                                             'tgt_type': 'glob'
+                                             }
+                                         }).ret)
