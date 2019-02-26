@@ -29,11 +29,11 @@ httpd_running:
     - watch:
       - index_conf_in_place
 
-# check existence of and contents of version_txt
-file_version_txt_managed:
+# check existence of and contents of status_txt
+file_status_txt_managed:
   file.managed:
-      - name: /var/www/html/version.txt
-      - source: salt://apache-base/files/version.txt
+      - name: /var/www/html/
+      - source: salt://apache-base/files/app/
       - template: jinja
       - version: {{ version }}
 
