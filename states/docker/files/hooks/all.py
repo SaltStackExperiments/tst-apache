@@ -1,10 +1,199 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Python Example for Python GitHub Webhooks
 # File: push-myrepo-master
 
 import sys
-import os
 import json
+import requests
+import os
+import urllib3
+import logging
+
+# from pprint import pprint
+
+urllib3.disable_warnings()
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+log = logging.getLogger(__name__)
+
+# the default minimum elements needed to make an RPC call
+DEFAULT_MINIMUM_PATH = 2
+
+
+class SSEThing(object):
+    def __init__(self, base_url, **kwargs):
+        self._current_path = []
+        self._session = None
+        if base_url[-1] != '/':
+            base_url += '/'
+
+        # TODO refactor this, it feels messy
+        base_url.replace('http://', 'https://')
+        if base_url[:8] != 'https://':
+            base_url = 'https://'+base_url
+
+        self.urls = {
+            'rpc': {'url': base_url + 'rpc'},
+            'auth': {'url': base_url + 'version'},
+            'formula': {'url': base_url + 'formula', 'min': 1}
+        }
+        [log.debug('%s url %s', x, v['url']) for x, v in self.urls.items()]
+        self.kwargs = kwargs
+
+        self._auth = (
+                os.getenv('SSE_USERNAME', kwargs.get('username')),
+                os.getenv('SSE_PASSWORD', kwargs.get('password')))
+
+    def __call__(self, **kwargs):
+        """Here is an example of instantiating the SSEThing object and calling a simple
+        endpoint.
+
+
+          c = SSEThing('192.168.50.20', username='root', password='salt')
+          c.api.get_versions()
+          r = c.api.get_versions().json()
+          {'error': None,
+             'ret': {'deps': [['alembic', '0.9.0'],
+                              ['APScheduler', '3.2.0'],
+                              ['asyncio_extras', '1.3.0'],
+                              ['asyncpg', '0.15.0'],
+                              ['backoff', '1.4.3'],
+                              ['certifi', '2018.04.16'],
+                              ['croniter', '0.3.20'],
+                              ['dateutil', '2.6.1'],
+                              ['jinja2', '2.9.6'],
+                              ['json-delta', '2.0'],
+                              ['jsonschema', '2.6.0'],
+                              ['ldap3', '2.5'],
+                              ['ldap3-binary', '2.5'],
+                              ['libnacl', '1.6.1'],
+                              ['mako', '1.0.6'],
+                              ['marshmallow', '2.13.6'],
+                              ['marshmallow-jsonschema',
+                               '0.4.0.pre0.saltstack0'],
+                              ['msgpack-python', '0.4.8'],
+                              ['pack', None],
+                              ['pg8000', '1.10.6'],
+                              ['psutil', '5.0.0'],
+                              ['psycopg2', None],
+                              ['pyasn1', '0.4.3'],
+                              ['pyasn1-binary', '0.4.3'],
+                              ['python-editor', '1.0.3'],
+                              ['pytz', '2018.4'],
+                              ['PyYAML', '3.12'],
+                              ['raven', '6.1.0'],
+                              ['salt', '2018.3.0'],
+                              ['setproctitle', '1.1.10'],
+                              ['six', '1.11.0'],
+                              ['SQLAlchemy', '1.1.11'],
+                              ['tornado', '4.5.1']],
+                     'opts': {
+                        'customer_id': '43cab1f4-de60-4ab1-85b5-1d883c5c5d09',
+                        'sql': {'dialect': 'postgresql',
+                                'driver': 'pg8000',
+                                'host': 'localhost',
+                                'pool_recycle': 3600,
+                                'pool_timeout': 10,
+                                'port': 5432,
+                                'ssl': True}},
+                     'os': {'machine': 'x86_64',
+                            'release': '3.10.0-514.21.1.el7.x86_64',
+                            'sysname': 'Linux',
+                            'version': '#1 SMP Thu May 25 17:04:51 UTC 2017'},
+                     'python': '3.5.4 (default, Aug  8 2017, 11:09:21)',
+                     'raas': {'raas': '5.4.0', 'rest_api': 'v1'}},
+             'riq': 140665311677520,
+             'warnings': []}
+        """
+        # NOTE formula path is special, the data should be a raw post body and
+        # it has no secondary element
+        is_formula = self._current_path[0] == 'formula'
+
+        minimum = self.urls.get(self._current_path[0],
+                                self.urls['rpc']).get('min',
+                                                      DEFAULT_MINIMUM_PATH)
+        if len(self._current_path) >= minimum or is_formula:
+            # There is enough information to make the api call
+            log.debug('making %s api call', '.'.join(self._current_path))
+            log.debug('kwargs %s', list(kwargs.keys()))
+            data = {'resource': self._current_path[0],
+                    'method': self._current_path[1],
+                    'kwarg': kwargs
+                    }
+            url = 'rpc'
+            if is_formula:
+                url = 'formula'
+            return self.__post(_data=data, _api=url, **kwargs)
+        else:
+            # Not enough information
+            log.error('Not enough information to make an api call')
+            return None
+
+    def __getattr__(self, name):
+        """
+        >>> c = SSEThing('192.168.50.20', username='root', password='salt')
+        >>> v = c.api
+        >>> c._current_path
+        ['api']
+        >>> v = c.api.get_versions
+        >>> c.current_path
+        ['api', 'get_versions']
+        """
+
+        if len(self._current_path) < 2:
+            self._current_path.append(name)
+        else:
+            # Replace the last method with this one
+            self._current_path[1] = name
+        return self
+
+    def reset(self):
+        """
+        >>> c = SSEThing('192.168.50.20', username='root', password='salt')
+        >>> v = c.api.get_versions
+        >>> c._current_path
+        ['api', 'get_versions']
+        >>> c.reset()
+        >>> c.current_path
+        []
+        """
+        self._current_path = []
+
+    def __session(self):
+        if not self._session:
+            log.debug('authenticating now')
+            session = requests.Session()
+            session.auth = self._auth
+            session.verify = False
+            if not all(self._auth):
+                log.error('missing username or password')
+                self._session = None
+            else:
+                req = session.get(self.urls['auth']['url'])
+                if req.status_code == 200:
+                    h = {'X-Xsrftoken': req.headers['X-Xsrftoken']}
+                    session.headers.update(h)
+                    self._session = session
+                    log.debug('authenticated %s', req.text)
+                else:
+                    log.error('unable to authenticate %s', req.status_code)
+        return self._session
+
+    def __post(self, _api='rpc', _data={}, **kwargs):
+
+        session = self.__session()
+        log.debug('url: %s', _api)
+
+        path = self.urls.get(_api)['url']
+        log.debug('path: %s', path)
+
+        session.headers.update({'Content-Type': 'application/json'})
+        log.debug('_data %s', _data)
+        json_res = session.post(path, data=json.dumps(_data))
+        self.reset()
+        return json_res
+
 
 if __name__ == "__main__":
     with open(sys.argv[1], 'r') as jsf:
@@ -19,3 +208,5 @@ if __name__ == "__main__":
 
     with open(outfile, 'w') as f:
         f.write(json.dumps(payload))
+
+    sset = SSEThing('https://sse.kajigga.com', 'root', 'bonkersnot')

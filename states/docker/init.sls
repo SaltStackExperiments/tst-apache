@@ -110,6 +110,6 @@ apache_running:
 # ensure http query works with proper status, etc
 http_check_port_query:
   http.query:
-    - name: "http://localhost:5000/webhook"
+    - name: "http://localhost/webhook"
     - status: 200
     - method: POST
