@@ -110,10 +110,10 @@ apache_running:
 # ensure http query works with proper status, etc
 http_check_port_query:
   http.query:
-    - name: http://localhost/webhook
+    - name: "http://localhost:5000/webhook"
     # status code to look for. Can be used in place of match
     - status: 200
     # - match: pattern to look for in the return text
     # default match_type is string
     # - match_type: string|pcre
-    method: POST
+    - method: POST
