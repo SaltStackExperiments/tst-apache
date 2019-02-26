@@ -85,4 +85,9 @@ webhooks_running:
       - file_/var/webhooks/config.js_managed
       - file_/var/webhooks/hooks/_managed
 
+# check existence of and contents of /etc/httpd/conf.d/webhook.conf
+file_/etc/httpd/conf.d/webhook.conf_managed:
+  file.managed:
+      - name: /etc/httpd/conf.d/webhook.conf
+      - source: salt://docker/files/webhook.conf
 
