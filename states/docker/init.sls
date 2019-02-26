@@ -82,7 +82,7 @@ webhooks_running:
     - image: {{ docker_image }}:{{ docker_tag }}
     - name: webhooks
     - ports:
-      - 5000
+      - "5000:5000"
     - volumes:
       - '{{ webhooks_base_folder }}hooks:/var/webhooks/hooks'
       - '{{ webhooks_base_folder }}config.json:/src/config.json'
