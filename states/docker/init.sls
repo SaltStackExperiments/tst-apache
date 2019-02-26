@@ -88,7 +88,7 @@ webhooks_running:
     - binds:
       - '{{ webhooks_base_folder }}hooks:/var/webhooks/hooks:Z'
       - '{{ webhooks_base_folder }}config.json:/app/config.json:Z'
-    - require:
+    - watch:
       - file_/var/webhooks/config.js_managed
       - file_/var/webhooks/hooks/_managed
 
