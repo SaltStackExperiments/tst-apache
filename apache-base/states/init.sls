@@ -1,4 +1,4 @@
-{% set version = '1.5.2' %}
+{% set version = pillar.get('app_version') %}
 # /srv/salt/apache-base/init.sls
 # run this state with salt <minion_id> state.apply apache-base
 httpd:
@@ -35,7 +35,6 @@ file_application_in_place:
       - name: /var/www/html/
       - source: salt://apache-base/files/app/
       - template: jinja
-      - version: {{ version }}
 
 
 verify_application_status:
