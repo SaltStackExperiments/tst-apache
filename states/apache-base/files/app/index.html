@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>{{ pillar.get('app_title', 'One Page Wonder')}} - Start Bootstrap Template</title>
+  <title>{{ pillar.get('app_title', 'One Page Wonder')}}</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@
     <div class="masthead-content">
       <div class="container">
         <h1 class="masthead-heading mb-0">{{ pillar.get('app_page_title', 'Salt Demo Page')}}</h1>
-        <h2 class="masthead-subheading mb-0">Will Rock Your Socks Off</h2>
+        <h2 class="masthead-subheading mb-0">{{ pillar.get('app_page_sub_title', 'Sub Title') }}</h2>
         <a href="#" class="btn btn-primary btn-xl rounded-pill mt-5">Learn More</a>
       </div>
     </div>
