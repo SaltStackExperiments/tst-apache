@@ -2,7 +2,7 @@
 #   cmd.run:
 #     - name: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
 
-setup_repo:
+docker_repo_added:
   cmd.run:
     - name: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
 
