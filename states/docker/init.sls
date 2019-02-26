@@ -6,16 +6,16 @@ docker_repo_added:
     - refresh: True
 
 docker-installed:
-   pkg.installed: 
-     - names:
-        - yum-utils
-        - device-mapper-persistent-data
-        - lvm2
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
-      - require:
-        - docker_repo_added
+  pkg.installed: 
+    - names:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    - require:
+      - docker_repo_added
 
 pip_installed:
   pkg.installed:
