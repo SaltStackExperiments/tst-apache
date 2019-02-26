@@ -87,7 +87,7 @@ webhooks_running:
       - "5000:5000"
     - binds:
       - '{{ webhooks_base_folder }}hooks:/var/webhooks/hooks:Z'
-      - '{{ webhooks_base_folder }}config.json:/app/config.json'
+      - '{{ webhooks_base_folder }}config.json:/app/config.json:Z'
     - require:
       - file_/var/webhooks/config.js_managed
       - file_/var/webhooks/hooks/_managed
