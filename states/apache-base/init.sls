@@ -1,6 +1,8 @@
 {% set version = pillar.get('app_version') %}
-# /srv/salt/apache-base/init.sls
+# apache-base/init.sls
 # run this state with salt <minion_id> state.apply apache-base
+
+
 httpd:
    pkg.installed: 
      - name: httpd
@@ -45,3 +47,5 @@ verify_application_status:
     - require:
       - httpd_running
       - file_application_in_place
+
+
