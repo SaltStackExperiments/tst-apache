@@ -66,7 +66,7 @@ file_/var/webhooks/config.js_managed:
 
 # check existence of and contents of /var/webhooks/hooks/
 file_/var/webhooks/hooks/_managed:
-  file.managed:
+  file.recurse:
       - name: {{webhooks_base_folder}}hooks/
       - source: salt://docker/files/hooks/
       - makedirs: True
@@ -90,4 +90,5 @@ file_/etc/httpd/conf.d/webhook.conf_managed:
   file.managed:
       - name: /etc/httpd/conf.d/webhook.conf
       - source: salt://docker/files/webhook.conf
+      - makedirs: True
 
