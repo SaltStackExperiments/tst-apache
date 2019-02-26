@@ -30,7 +30,7 @@ httpd_running:
       - index_conf_in_place
 
 # check existence of and contents of status_txt
-file_status_txt_managed:
+file_application_in_place:
   file.managed:
       - name: /var/www/html/
       - source: salt://apache-base/files/app/
@@ -45,3 +45,4 @@ verify_application_status:
     - match: 'version:{{ version }}'
     - require:
       - httpd_running
+      - file_application_in_place
