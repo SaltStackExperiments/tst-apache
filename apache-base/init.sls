@@ -31,7 +31,7 @@ httpd_running:
 
 # check existence of and contents of status_txt
 file_application_in_place:
-  file.managed:
+  file.recurse:
       - name: /var/www/html/
       - source: salt://apache-base/files/app/
       - template: jinja
