@@ -22,6 +22,7 @@ docker-installed:
       - docker-ce
       - docker-ce-cli
       - containerd.io
+      - git
     - require:
       - docker_repo_added
 
