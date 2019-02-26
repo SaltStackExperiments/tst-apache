@@ -51,7 +51,7 @@ webhook_git_cloned:
 #docker build -t carlos-jenkins/python-github-webhooks python-github-webhooks
 {% set docker_image = 'carlos-jenkins/python-github-webhooks' %}
 image_built:
-  dockerng.image_present:
+  docker.image_present:
     - build: /var/python-github-webhooks
     - name: {{ docker_image }} 
     - watch: 
@@ -74,7 +74,7 @@ file_/var/webhooks/hooks/_managed:
 
 #docker run -d --name webhooks -p 5000:5000 carlos-jenkins/python-github-webhooks
 webhooks_running:
-  dockerng.running:
+  docker.running:
     - image: {{ docker_image }}
     - name: webhooks
     - ports:
