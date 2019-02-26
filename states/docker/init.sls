@@ -87,7 +87,7 @@ webhooks_running:
       - "5000:5000"
     - volumes:
       - '{{ webhooks_base_folder }}hooks:/var/webhooks/hooks'
-      - '{{ webhooks_base_folder }}config.json:/src/config.json'
+      - '{{ webhooks_base_folder }}config.json:/app/config.json'
     - require:
       - file_/var/webhooks/config.js_managed
       - file_/var/webhooks/hooks/_managed
@@ -106,3 +106,14 @@ apache_running:
     - restart: True
     - watch:
       - file_/etc/httpd/conf.d/webhook.conf_managed
+
+# ensure http query works with proper status, etc
+http_check_port_query:
+  http.query:
+    - name: http://localhost/webhook
+    # status code to look for. Can be used in place of match
+    - status: 200
+    # - match: pattern to look for in the return text
+    # default match_type is string
+    # - match_type: string|pcre
+    method: POST
