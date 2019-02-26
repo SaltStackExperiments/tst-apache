@@ -44,6 +44,7 @@ docker_running:
     - require:
       - docker-installed
 
+
 webhook_git_cloned:
   git.latest:
     - name: http://github.com/carlos-jenkins/python-github-webhooks.git
@@ -96,3 +97,10 @@ file_/etc/httpd/conf.d/webhook.conf_managed:
       - source: salt://docker/files/webhook.conf
       - makedirs: True
 
+apache_running:
+  service.running:
+    - name: httpd
+    - enable: True
+    - restart: True
+    - watch:
+      - file_/etc/httpd/conf.d/webhook.conf_managed
