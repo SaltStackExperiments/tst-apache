@@ -1,3 +1,7 @@
+subscript-rhel-y-server-extras-rpms:
+  cmd.run:
+    - name: "subscription-manager repos --enable=rhel-7-server-extras-rpms"
+
 docker_repo_added:
   pkgrepo.managed:
     - name: docker-ce
