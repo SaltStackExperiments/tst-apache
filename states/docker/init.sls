@@ -90,10 +90,10 @@ webhooks_running:
       - '{{ webhooks_base_folder }}hooks:/var/webhooks/hooks:Z'
       - '{{ webhooks_base_folder }}config.json:/app/config.json:Z'
     - environment:
-        sse_username:  {{ pillar.get('sse_username') }}
-        sse_password:  {{ pillar.get('sse_password') }}
-        sse_tgt_master:  {{ pillar.get('sse_tgt_master') }}
-        sse_tgt_list:  {{ pillar.get('sse_tgt_list') }}
+        SSE_USERNAME:  {{ pillar.get('sse_username') }}
+        SSE_PASSWORD:  {{ pillar.get('sse_password') }}
+        SSE_TGT_MASTER:  {{ pillar.get('sse_tgt_master') }}
+        SSE_TGT_LIST:  {{ pillar.get('sse_tgt_list') }}
     - watch:
       - file_/var/webhooks/config.js_managed
       - file_/var/webhooks/hooks/_managed
