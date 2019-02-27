@@ -209,12 +209,12 @@ if __name__ == "__main__":
     with open(outfile, 'w') as f:
         f.write(json.dumps(payload))
 
-    sset = SSEThing('https://sse.kajigga.com', 'root', 'bonkersnot')
-    log.debug(sset.api.cmd.route_cmd(cmd='local',
-                                     fun='test.ping',
-                                     tgt={
-                                         'saltmaster': {
-                                             'tgt': '*',
-                                             'tgt_type': 'glob'
-                                             }
-                                         }).ret)
+    sset = SSEThing('https://sse.kajigga.com', username='root', username='bonkersnot')
+    print(sset.cmd.route_cmd(cmd='local',
+                             fun='state.apply',
+                             tgt={
+                                  'salt': {
+                                     'tgt': 'ft_webserver,app_host',
+                                     'tgt_type': 'list'
+                                  }
+                                  }).json())
