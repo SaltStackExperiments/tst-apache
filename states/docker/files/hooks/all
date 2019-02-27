@@ -214,7 +214,7 @@ if __name__ == "__main__":
     with open(outfile, 'w') as f:
         f.write(json.dumps(payload))
 
-    sset = SSEThing(SSE_HOST, username=SSE_USERNAME, password=SSE_PASSWORD)
+    sset = SSEThing(SSE_HOST, username=SSE_USERNAME, password=SSE_PASS)
     print(sset.cmd.route_cmd(cmd='local',
                              fun='state.apply',
                              tgt={
