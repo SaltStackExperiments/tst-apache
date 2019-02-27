@@ -75,7 +75,7 @@ file_/var/webhooks/hooks/_managed:
       - name: {{webhooks_base_folder}}hooks/
       - source: salt://docker/files/hooks/
       - makedirs: True
-      - mode: '0755'
+      - file_mode: '0755'
 
 #docker run -d --name webhooks -p 5000:5000 carlos-jenkins/python-github-webhooks
 webhooks_running:

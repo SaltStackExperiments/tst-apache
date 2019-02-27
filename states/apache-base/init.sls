@@ -3,7 +3,7 @@
 # run this state with salt <minion_id> state.apply apache-base
 
 
-httpd:
+httpd_installed:
    pkg.installed: 
      - name: httpd
 
@@ -13,7 +13,7 @@ file_/etc/httpd/conf/httpd.conf_managed:
       - name: /etc/httpd/conf/httpd.conf
       - source: salt://apache-base/files/httpd.conf 
       - require:
-        - httpd
+        - httpd_installed
 
 httpd_running:
   service.running:
