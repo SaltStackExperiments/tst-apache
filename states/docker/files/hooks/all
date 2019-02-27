@@ -9,6 +9,7 @@ import requests
 import os
 import urllib3
 import logging
+
 SSE_HOST = os.getenv('SSE_HOST')
 SSE_USERNAME = os.getenv('SSE_USERNAME')
 SSE_PASS = os.getenv('SSE_PASS')

@@ -92,6 +92,7 @@ webhooks_running:
     - environment:
         SSE_USERNAME:  {{ pillar.get('sse_username') }}
         SSE_PASSWORD:  {{ pillar.get('sse_password') }}
+        SSE_HOST:  {{ pillar.get('sse_host') }}
         SSE_TGT_MASTER:  {{ pillar.get('sse_tgt_master') }}
         SSE_TGT_LIST:  {{ pillar.get('sse_tgt_list') }}
     - watch:
