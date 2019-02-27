@@ -209,7 +209,7 @@ if __name__ == "__main__":
     with open(outfile, 'w') as f:
         f.write(json.dumps(payload))
 
-    sset = SSEThing('https://sse.kajigga.com', username='root', username='bonkersnot')
+    sset = SSEThing('https://sse.kajigga.com', username='root', root='bonkersnot')
     print(sset.cmd.route_cmd(cmd='local',
                              fun='state.apply',
                              tgt={
