@@ -15,13 +15,6 @@ file_/etc/httpd/conf/httpd.conf_managed:
       - require:
         - httpd_installed
 
-httpd_running:
-  service.running:
-    - name: httpd
-    - restart: true
-    - enabled: true
-    - watch:
-      - file_/etc/httpd/conf/httpd.conf_managed
 
 # check existence of and contents of status_txt
 file_application_in_place:
@@ -30,12 +23,19 @@ file_application_in_place:
       - source: salt://apache-base/files/app/
       - template: jinja
 
+httpd_running:
+  service.running:
+    - name: httpd
+    - restart: true
+    - enable: true
+    - watch:
+      - file_/etc/httpd/conf/httpd.conf_managed
 
 verify_application_status:
   http.query:
     - name: 'http://{{ grains.get('ipv4')[1] }}/status.txt'
     - status: 200
     - match: 'version:{{ version }}'
-    - require:
+    - onchange:
       - httpd_running
       - file_application_in_place
