@@ -1,6 +1,6 @@
 {
     "github_ips_only": false,
-    "enforce_secret": "",
+    "enforce_secret": "e938b6eb-3ea6-4891-aeb3-5bf2424a57cf",
     "return_scripts_info": true,
     "hooks_path": "/var/webhooks/hooks/"
 }
