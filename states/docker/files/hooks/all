@@ -9,6 +9,11 @@ import requests
 import os
 import urllib3
 import logging
+SSE_HOST = os.getenv('SSE_HOST')
+SSE_USERNAME = os.getenv('SSE_USERNAME')
+SSE_PASS = os.getenv('SSE_PASS')
+SSE_TGT_MASTER = os.getenv('SSE_TGT_MASTER')
+SSE_TGT_LIST = os.getenv('SSE_TGT_LIST')
 
 # from pprint import pprint
 
@@ -167,7 +172,7 @@ class SSEThing(object):
             session.auth = self._auth
             session.verify = False
             if not all(self._auth):
-                log.error('missing username or password')
+                log.error('missing username or password: %s', self._auth)
                 self._session = None
             else:
                 req = session.get(self.urls['auth']['url'])
@@ -209,12 +214,12 @@ if __name__ == "__main__":
     with open(outfile, 'w') as f:
         f.write(json.dumps(payload))
 
-    sset = SSEThing('https://sse.kajigga.com', username='root', root='bonkersnot')
+    sset = SSEThing(SSE_HOST, username=SSE_USERNAME, password=SSE_PASSWORD)
     print(sset.cmd.route_cmd(cmd='local',
                              fun='state.apply',
                              tgt={
-                                  'salt': {
-                                     'tgt': 'ft_webserver,app_host',
+                                  SSE_TGT_MASTER: {
+                                     'tgt': SSE_TGT_LIST,
                                      'tgt_type': 'list'
                                   }
                                   }).json())
