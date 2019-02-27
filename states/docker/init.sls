@@ -47,7 +47,7 @@ docker_running:
 
 webhook_git_cloned:
   git.latest:
-    - name: http://github.com/carlos-jenkins/python-github-webhooks.git
+    - name: https://github.com/kajigga/python-github-webhooks.git
     - target: /var/python-github-webhooks
 
 #docker build -t carlos-jenkins/python-github-webhooks python-github-webhooks
