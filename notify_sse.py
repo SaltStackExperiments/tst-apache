@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 import sys
+import os
+
 from sseapiclient.tornado import SyncClient
+
+print(os.environ)
 
 with SyncClient.connect('https://sse.kajigga.com', 'root', sys.argv[1], ssl_validate_cert=False) as client:
     print(client.api.cmd.route_cmd(cmd='local',
