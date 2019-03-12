@@ -1,7 +1,6 @@
 #!/bin/bash
 
-echo "SSEAPI_PASS arg $1"
-echo "SSEAPI_PASS env var $SSEAPI_PASS"
+export SSEAPI_PASS=$1
 
 # do the initial authentication
 curl -k -c $HOME/eAPICookie.txt -u root:$SSEAPI_PASS 'https://sse.kajigga.com/version' >/dev/null
