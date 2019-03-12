@@ -194,6 +194,7 @@ class SSEThing(object):
 
 # print(os.environ)
 
+print('pw', sys.argv[1])
 client = SSEThing('https://sse.kajigga.com', username='root', password=sys.argv[1])
 print(client.cmd.route_cmd(cmd='local',
                            job_uuid='71ccbd4c-5377-11e6-ba39-080027a7289c',
